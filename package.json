@@ -1,0 +1,28 @@
+{
+  "name": "private_label_inventorysystem",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Vamshi-gande/Private_Label_InventorySystem.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/Vamshi-gande/Private_Label_InventorySystem/issues"
+  },
+  "homepage": "https://github.com/Vamshi-gande/Private_Label_InventorySystem#readme",
+  "dependencies": {
+    "axios": "^1.10.0",
+    "dotenv": "^17.0.0",
+    "express": "^5.1.0",
+    "node-cron": "^4.1.1",
+    "pg": "^8.16.3"
+  }
+}
