@@ -58,5 +58,46 @@ CREATE INDEX idx_products_private_label ON products(is_private_label) WHERE is_p
 SELECT table_name
 FROM information_schema.tables
 WHERE table_schema = 'public';
+-- Adding new columns to the products table(component-2)
+alter table products
+add column brand varchar(100),
+add column sales_velocity DECIMAL(10,2) DEFAULT 0,
+add column base_priority DECIMAL(3,2) DEFAULT 1.0,
+add column calculated_priority DECIMAL(3,2) DEFAULT 1.0,
+add column created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+add column updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP;
+
+alter table products
+alter column is_private_label set default null;
 
 
+-- Adding new columns to the inventory table(component-2)
+CREATE TABLE classification_rules (
+    rule_id SERIAL PRIMARY KEY,
+    rule_type VARCHAR(50) NOT NULL, -- BRAND or SKU_PATTERN
+    rule_pattern VARCHAR(255) NOT NULL, -- Regex or substring
+    confidence_score DECIMAL(3,2) DEFAULT 1.0, -- Confidence in this rule (0 to 1)
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE priority_profiles (
+    profile_id SERIAL PRIMARY KEY,
+    product_type VARCHAR(50) NOT NULL, -- PRIVATE_LABEL or THIRD_PARTY
+    base_multiplier DECIMAL(3,2) DEFAULT 1.0,
+    max_multiplier DECIMAL(3,2) DEFAULT 2.0,
+    performance_weight DECIMAL(3,2) DEFAULT 0.5, -- How much sales_velocity influences final priority
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE suggested_rules (
+    suggestion_id SERIAL PRIMARY KEY,
+    rule_type VARCHAR(50),
+    rule_pattern VARCHAR(255),
+    occurrence_count INT DEFAULT 0,
+    confidence_score DECIMAL(3,2),
+    status VARCHAR(20) DEFAULT 'PENDING', -- PENDING, ACCEPTED, REJECTED
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    decision_at TIMESTAMP NULL
+);
+
+drop table suggested_rules;
