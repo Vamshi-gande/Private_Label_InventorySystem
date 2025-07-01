@@ -100,6 +100,9 @@ CREATE TABLE suggested_rules (
     decision_at TIMESTAMP NULL
 );
 
+ALTER TABLE products ADD COLUMN category VARCHAR(100);
+ALTER TABLE products ADD COLUMN supplier_id VARCHAR(100);
+ALTER TABLE products ADD COLUMN unit_cost DECIMAL(10,2) DEFAULT 0.00;
 drop table suggested_rules;
 
 CREATE TABLE IF NOT EXISTS manager_actions (

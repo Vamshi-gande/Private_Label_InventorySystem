@@ -12,10 +12,18 @@ async function calculatePriority(product, isPrivateLabel) {
 
     const profile = profileResult.rows[0];
 
-    let finalPriority = profile.base_multiplier + (product.sales_velocity * profile.performance_weight);
+    if (!profile) {
+        throw new Error(`Priority profile not found for product type: ${type}`);
+    }
 
-    if (finalPriority > profile.max_multiplier) {
-        finalPriority = profile.max_multiplier;
+    let baseMultiplier = Number(profile.base_multiplier) || 0;
+    let performanceWeight = Number(profile.performance_weight) || 0;
+    let maxMultiplier = Number(profile.max_multiplier) || 0;
+
+    let finalPriority = baseMultiplier + (Number(product.sales_velocity) * performanceWeight);
+
+    if (finalPriority > maxMultiplier) {
+        finalPriority = maxMultiplier;
     }
 
     return finalPriority.toFixed(2);

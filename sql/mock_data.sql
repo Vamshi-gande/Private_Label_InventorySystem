@@ -64,3 +64,34 @@ INSERT INTO manager_actions (store_id, product_id, action_type, quantity, origin
 -- Additional quantity adjustment examples
 (3, 3, 'bulk_order', 400, '2025-07-20', '2025-07-05 10:00:00', 'Summer beverage surge - 300% increase from normal order'),
 (4, 4, 'bulk_order', 350, '2025-08-01', '2025-07-10 14:00:00', 'Back-to-school cereal demand - massive order increase');
+
+
+--Component-2
+-- Insert Initial Classification Rules
+INSERT INTO classification_rules (rule_type, rule_pattern, confidence_score) VALUES
+('BRAND', 'Store Brand', 1.0),
+('BRAND', 'House Label', 0.9),
+('SKU_PATTERN', 'PL%', 0.95),
+('SKU_PATTERN', 'HL%', 0.9);
+
+
+-- Insert Priority Profiles
+INSERT INTO priority_profiles (product_type, base_multiplier, max_multiplier, performance_weight) VALUES
+('PRIVATE_LABEL', 1.5, 3.0, 0.5),
+('THIRD_PARTY', 1.0, 2.0, 0.3);
+
+
+-- Insert Products (Some Matching, Some Not)
+INSERT INTO products (
+  sku, product_name, brand, category, is_private_label, profit_margin_percentage,
+  sales_velocity, base_priority, calculated_priority, supplier_id, unit_cost,
+  selling_price, participate_in_allocation
+)
+VALUES
+('PL001', 'Store Brand Premium Coffee', 'Store Brand', 'Beverages', TRUE, 45.00, 2.0, 1.5, 2.5, 101, 5.00, 9.99, TRUE),
+('HL001', 'House Label Organic Pasta', 'House Label', 'Food', TRUE, 35.00, 3.0, 1.5, 3.0, 102, 1.00, 1.85, TRUE),
+('TP001', 'Coca-Cola Classic 12pk', 'Coca-Cola', 'Beverages', FALSE, 18.00, 1.0, 1.0, 1.3, 103, 4.50, 5.99, TRUE),
+('TP002', 'Kellogg''s Corn Flakes', 'Kellogg''s', 'Food', FALSE, 22.00, 1.5, 1.0, 1.45, 104, 3.00, 4.99, TRUE),
+('UN001', 'Unclassified Energy Bar', 'Unknown Brand', 'Snacks', NULL, 25.00, 0.5, 1.0, 1.0, 105, 2.00, 3.50, TRUE);
+
+truncate table products cascade;
