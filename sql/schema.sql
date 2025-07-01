@@ -101,3 +101,14 @@ CREATE TABLE suggested_rules (
 );
 
 drop table suggested_rules;
+
+CREATE TABLE IF NOT EXISTS manager_actions (
+    id SERIAL PRIMARY KEY,
+    store_id INT NOT NULL,
+    product_id INT NOT NULL,
+    action_type VARCHAR(50), -- 'early_order', 'emergency_order', etc.
+    quantity INT,
+    original_schedule_date DATE,
+    action_timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    comments TEXT
+);
