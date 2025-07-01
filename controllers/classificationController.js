@@ -47,14 +47,17 @@ exports.batchClassifyProducts = async (req, res) => {
 
     try {
         const results = [];
+        const skippedProducts = [];
 
         for (const product of products) {
             const classification = await classifyProduct(product);
             const priority = await calculatePriority({ sales_velocity: product.salesVelocity }, classification.isPrivateLabel);
 
-            await pool.query(
+            const insertResult = await pool.query(
                 `INSERT INTO products (sku, product_name, brand, category, is_private_label, profit_margin_percentage, sales_velocity, base_priority, calculated_priority, supplier_id, unit_cost, selling_price, participate_in_allocation)
-                 VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)`,
+                 VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
+                 ON CONFLICT (sku) DO NOTHING
+                 RETURNING sku`,
                 [
                     product.sku,
                     product.productName,
@@ -72,16 +75,22 @@ exports.batchClassifyProducts = async (req, res) => {
                 ]
             );
 
-            results.push({
-                sku: product.sku,
-                isPrivateLabel: classification.isPrivateLabel,
-                calculatedPriority: priority
-            });
+            if (insertResult.rows.length === 0) {
+                // Product was skipped due to duplicate SKU
+                skippedProducts.push(product.sku);
+            } else {
+                results.push({
+                    sku: product.sku,
+                    isPrivateLabel: classification.isPrivateLabel,
+                    calculatedPriority: priority
+                });
+            }
         }
 
         res.json({
             success: true,
             classifiedProducts: results,
+            skippedProducts: skippedProducts,
             message: 'Batch classification completed.'
         });
 
