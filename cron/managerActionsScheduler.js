@@ -1,4 +1,13 @@
 const cron = require('node-cron');
-const analyze = require('./services/analyzeManagerActions');
+const analyzeManagerActions = require('../services/analyzeManagerActions');
 
-cron.schedule('*/5 * * * *', analyze); // Every 5 mins
+// Runs every 5 minutes to analyze manager actions and extract behavioral signals
+cron.schedule('*/5 * * * *', async () => {
+    try {
+        console.log('Running Manager Action Analysis...');
+        await analyzeManagerActions();
+        console.log('Manager Action Analysis completed');
+    } catch (error) {
+        console.error('Manager Action Analysis failed:', error.message);
+    }
+});
