@@ -105,6 +105,7 @@ ALTER TABLE products ADD COLUMN supplier_id VARCHAR(100);
 ALTER TABLE products ADD COLUMN unit_cost DECIMAL(10,2) DEFAULT 0.00;
 drop table suggested_rules;
 
+--COMPONENT-3
 CREATE TABLE IF NOT EXISTS manager_actions (
     id SERIAL PRIMARY KEY,
     store_id INT NOT NULL,
@@ -115,3 +116,32 @@ CREATE TABLE IF NOT EXISTS manager_actions (
     action_timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     comments TEXT
 );
+
+ALTER TABLE manager_actions ADD COLUMN manager_id INT;
+
+
+--COMPONENT-4
+-- 1. Add store location fields for clustering
+ALTER TABLE stores ADD COLUMN latitude DECIMAL(9,6);
+ALTER TABLE stores ADD COLUMN longitude DECIMAL(9,6);
+
+-- 2. Manager Performance Table (Optional but recommended)
+CREATE TABLE IF NOT EXISTS manager_performance (
+    manager_id VARCHAR(10) PRIMARY KEY,
+    current_weight DECIMAL(3,2) DEFAULT 0.5 -- Start with neutral weight
+);
+
+-- 3. Consensus History Table
+CREATE TABLE IF NOT EXISTS regional_consensus_history (
+    consensus_id SERIAL PRIMARY KEY,
+    region VARCHAR(50),
+    signal_type VARCHAR(50),
+    consensus_strength DECIMAL(3,2),
+    participation_rate DECIMAL(3,2),
+    participating_stores INTEGER,
+    confidence DECIMAL(3,2),
+    emergency_alert BOOLEAN DEFAULT FALSE,
+    recommended_action VARCHAR(100),
+    created_at TIMESTAMP DEFAULT NOW()
+);
+

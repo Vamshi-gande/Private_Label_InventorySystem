@@ -2,13 +2,13 @@ const pool = require('../config/db');
 const behaviorAnalyzer = require('../services/behaviourAnalyzer');
 
 exports.logAction = async (req, res) => {
-  const { store_id, product_id, action_type, quantity, original_schedule_date, comments } = req.body;
+  const { store_id, product_id, action_type, quantity, original_schedule_date, comments, manager_id } = req.body;
   try {
     await pool.query(
-      `INSERT INTO manager_actions (store_id, product_id, action_type, quantity, original_schedule_date, comments)
-       VALUES ($1, $2, $3, $4, $5, $6)`,
-      [store_id, product_id, action_type, quantity, original_schedule_date, comments]
-    );
+    'INSERT INTO manager_actions (store_id, product_id, action_type, quantity, original_schedule_date, comments, manager_id) VALUES ($1, $2, $3, $4, $5, $6, $7)',
+    [store_id, product_id, action_type, quantity, original_schedule_date, comments, manager_id]
+  );
+
     res.status(201).json({ message: 'Action logged successfully' });
   } catch (err) {
     res.status(500).json({ error: err.message });

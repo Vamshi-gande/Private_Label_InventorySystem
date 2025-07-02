@@ -22,8 +22,8 @@ const healthRoutes = require('./routes/health');
 //Component-3
 const managerActionsRoutes = require('./routes/managerActions');
 
-//Component-3
-const managerActionsRoutes = require('./routes/managerActions');
+//Component-4
+const consensusRoutes = require('./routes/consensus');
 
 app.use(express.json());
 
@@ -42,8 +42,10 @@ app.use('/api/health', healthRoutes);
 app.use('/api/manager-actions', managerActionsRoutes);
 
 //Component-3 Routes
-app.use('/api/manager-actions', managerActionsRoutes);
+//app.use('/api/manager-actions', managerActionsRoutes); 
 
+//Component-4 Routes
+app.use('/api/consensus', consensusRoutes);
 
 const PORT = process.env.SERVER_PORT || 3000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
