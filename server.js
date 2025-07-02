@@ -41,9 +41,6 @@ app.use('/api/health', healthRoutes);
 //Component-3 Routes
 app.use('/api/manager-actions', managerActionsRoutes);
 
-//Component-3 Routes
-//app.use('/api/manager-actions', managerActionsRoutes); 
-
 //Component-4 Routes
 app.use('/api/consensus', consensusRoutes);
 
