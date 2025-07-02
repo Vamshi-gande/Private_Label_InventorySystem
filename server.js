@@ -17,6 +17,8 @@ const dashboardRoutes = require('./routes/dashboard');
 const healthRoutes = require('./routes/health');
 const managerActionsRoutes = require('./routes/managerActions');
 
+//Component-3
+const managerActionsRoutes = require('./routes/managerActions');
 
 app.use(express.json());
 
@@ -32,7 +34,8 @@ app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/health', healthRoutes);
 app.use('/api/manager-actions', managerActionsRoutes);
 
-
+//Component-3 Routes
+app.use('/api/manager-actions', managerActionsRoutes);
 
 const PORT = process.env.SERVER_PORT || 3000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
