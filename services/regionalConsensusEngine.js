@@ -2,11 +2,11 @@ const { clusterStores } = require('./clusteringService');
 const { saveConsensus } = require('./consensusStorage');
 
 class RegionalConsensusEngine {
-    constructor() {
-        this.consensusThreshold = 0.6; // Minimum consensus threshold
+    constructor(consensusThreshold = 0.4) {
+        this.consensusThreshold = consensusThreshold;
         this.minStoresForConsensus = 3;
         this.regionalClusters = new Map();
-        this.performanceWeights = new Map(); // Manager accuracy weights
+        this.performanceWeights = new Map();
     }
 
     async initializeRegionalClusters(stores, managerActions) {
@@ -26,7 +26,6 @@ class RegionalConsensusEngine {
 
     async validateBehavioralSignals(managerActions, timeWindow = 7) {
         const consensusResults = new Map();
-
         const regionalSignals = this.groupSignalsByRegion(managerActions, timeWindow);
 
         for (const [region, signals] of regionalSignals) {
@@ -68,6 +67,10 @@ class RegionalConsensusEngine {
         }
 
         const signalTypes = this.groupSignalsByType(signals);
+        console.log(`🗺️ Region: ${region}`);
+        console.log('Signal Type Distribution:', Array.from(signalTypes.entries()));
+        console.log('Total Signals in Region:', signals.length);
+
         let strongestConsensus = null;
         let maxStrength = 0;
 
@@ -117,6 +120,11 @@ class RegionalConsensusEngine {
         const averageConfidence = this.calculateWeightedConfidence(weightedSignals);
         const consensusStrength = participationRate * averageConfidence;
 
+        console.log(`📊 Signal Type: ${signalType} in ${region}`);
+        console.log(`Participation Rate: ${participationRate}`);
+        console.log(`Average Confidence: ${averageConfidence}`);
+        console.log(`Consensus Strength: ${consensusStrength}`);
+
         return {
             region,
             signal_type: signalType,
@@ -135,14 +143,14 @@ class RegionalConsensusEngine {
 
         const totalWeight = weightedSignals.reduce((sum, signal) => sum + signal.weight, 0);
         const weightedConfidenceSum = weightedSignals.reduce((sum, signal) => {
-            return sum + (signal.extracted_intelligence?.confidence || 0.5) * signal.weight;
+            return sum + (signal.extracted_intelligence?.confidence || 0.8) * signal.weight;
         }, 0);
 
         return weightedConfidenceSum / totalWeight;
     }
 
     getManagerWeight(managerId) {
-        return this.performanceWeights.get(managerId) || 0.5;
+        return this.performanceWeights.get(managerId) || 0.8; // Boosted default for testing
     }
 
     updateManagerWeights(accuracyData) {

@@ -6,7 +6,6 @@ function clusterStores(stores, managerActions) {
         demandScore: calculateStoreDemandScore(managerActions, store.store_id)
     }));
 
-    // ✅ Clean and validate data points
     const validStores = storeData.filter(store => {
         return (
             store.location &&
@@ -21,9 +20,10 @@ function clusterStores(stores, managerActions) {
         throw new Error('No valid store locations available for clustering.');
     }
 
-    const clusterCount = Math.min(5, validStores.length); // Avoid asking for more clusters than data points
-
+    const clusterCount = Math.min(5, validStores.length);
     const dataPoints = validStores.map(store => [store.location.lat, store.location.lng]);
+
+    console.log('Clustering Data Points:', dataPoints);
 
     const clusteringResult = kmeans.kmeans(dataPoints, clusterCount);
 
@@ -39,7 +39,7 @@ function clusterStores(stores, managerActions) {
 
 function calculateStoreDemandScore(managerActions, storeId) {
     const recentActions = managerActions.filter(action => action.store_id === storeId);
-    return recentActions.reduce((sum, action) => sum + (action.extracted_intelligence?.confidence || 0.5), 0);
+    return recentActions.reduce((sum, action) => sum + (action.extracted_intelligence?.confidence || 0.8), 0);
 }
 
 module.exports = { clusterStores };
