@@ -5,6 +5,9 @@ const app = express();
 //Cleanup Scheduler
 const cronScheduler = require('./cron/cleanupScheduler');
 
+//Component-3 Manager Actions Scheduler
+const managerActionsScheduler = require('./cron/managerActionsScheduler');
+
 //Component-1
 const reservationRoutes = require('./routes/reservations');
 const inventoryRoutes = require('./routes/inventory');
@@ -15,6 +18,8 @@ const demoRoutes = require('./routes/demo');
 const classificationRoutes = require('./routes/classification');
 const dashboardRoutes = require('./routes/dashboard');
 const healthRoutes = require('./routes/health');
+
+//Component-3
 const managerActionsRoutes = require('./routes/managerActions');
 
 
@@ -30,7 +35,10 @@ app.use('/api/demo', demoRoutes);
 app.use('/api/classification', classificationRoutes);
 app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/health', healthRoutes);
+
+//Component-3 Routes
 app.use('/api/manager-actions', managerActionsRoutes);
+
 
 
 
