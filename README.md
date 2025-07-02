@@ -47,23 +47,32 @@ AI-driven platform that maximizes retail profitability by strategically optimizi
   - `GET /api/classification/rules` - Get classification rules
 
 #### Component 3: Manager Action Tracker (COMPLETE)
-- Status: Fully implemented with behavioral intelligence
+- Status: Fully implemented with enhanced behavioral intelligence
 - Location: `controllers/managerActionsController.js`, `services/behaviourAnalyzer.js`
 - Features:
-  - Event-driven manager action logging
-  - 6 types of behavioral intelligence extraction:
+  - Event-driven manager action logging with auto-classification
+  - Multi-signal intelligence extraction:
     - Order Timing Variance (demand_increase_expected)
     - Quantity Adjustments (market_opportunity_detected)
     - Emergency Orders (unexpected_demand_spike)
     - Safety Stock Changes (volatility_expected)
     - Competitive Response (market_disruption_detected)
     - Event Planning (event_driven_demand)
-  - Confidence scoring (50%-95%)
-  - Magnitude classification (moderate/significant/high)
-  - Automated scheduling (every 5 minutes)
+  - Advanced signal analysis:
+    - Confidence scoring (50%-95%)
+    - Magnitude classification (moderate/significant/high)
+    - Multiple signals per action support
+    - Quantitative metrics (days early, quantity increase %)
+  - Real-time processing features:
+    - Automated scheduling (every 5 minutes)
+    - Backward compatibility mode
+    - Enhanced signal extraction
+    - Action type auto-classification
 - API Endpoints:
-  - `POST /api/manager-actions` - Log manager actions
-  - `GET /api/manager-actions/signals` - Get behavioral signals
+  - `POST /` - Log manager actions (Current)
+  - `GET /signals` - Get behavioral signals (Current)
+  - `POST /api/manager-actions` - Enhanced logging (Planned)
+  - `GET /api/manager-actions/signals` - Enhanced signals (Planned)
 - Intelligence Metrics:
   - 83% signal detection rate
   - 10 signals from 12 actions
@@ -268,8 +277,11 @@ node test-manager-scheduler.js
 - `POST /api/classification/rules` - Add classification rule
 
 ### Manager Behavioral Intelligence
-- `POST /api/manager-actions` - Log manager action
-- `GET /api/manager-actions/signals` - Get behavioral signals
+- `POST /manager-actions` - Log manager action (Current)
+- `GET /manager-actions/signals` - Get behavioral signals (Current)
+- Enhanced endpoints coming in next release:
+  - `POST /api/manager-actions` - Enhanced logging
+  - `GET /api/manager-actions/signals` - Enhanced signals
 
 ### Analytics & Dashboard
 - `GET /api/analytics/*` - Analytics endpoints
