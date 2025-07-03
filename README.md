@@ -392,6 +392,3 @@ node test-manager-scheduler.js
 * `GET /api/analytics/*` - Analytics endpoints
 * `GET /api/dashboard/*` - Dashboard data
 
----
-
-If you want, I can also provide this as a downloadable `.md` file. Would you like me to prepare that for you?

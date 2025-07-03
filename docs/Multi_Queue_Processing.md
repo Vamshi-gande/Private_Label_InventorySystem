@@ -250,12 +250,3 @@ Tested via Postman:
 | Mock Data and Testing Setup            | ✅ Completed          |
 | WebSocket Dashboard                    | 🚧 Planned for later |
 
----
-
-If you would like, I can provide this document as:
-
-* A **Markdown (.md)** file for GitHub.
-* A **Word (.docx)** file for team circulation.
-* A **PDF file** for formal documentation.
-
-Let me know how you would like it exported!

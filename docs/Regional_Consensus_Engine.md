@@ -194,8 +194,3 @@ Example of a **Consensus Report:**
 * **Feeds Into:** Component 5 (Multi-Queue Processing) to prioritize high-confidence regional signals.
 * **Supports:** Emergency allocation queues and dynamic private label prioritization.
 
----
-
-If you want, I can format this as a PDF, a `README.md` file, or as a Confluence-friendly document.
-
-👉 **Do you want me to help write the markdown file or continue with Component 5’s documentation next?**
