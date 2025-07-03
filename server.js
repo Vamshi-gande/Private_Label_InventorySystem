@@ -25,6 +25,9 @@ const managerActionsRoutes = require('./routes/managerActions');
 //Component-4
 const consensusRoutes = require('./routes/consensus');
 
+//Component-5
+const queueRoutes = require('./routes/queueRoutes');
+
 app.use(express.json());
 
 //Component-1 Routes
@@ -44,6 +47,8 @@ app.use('/api/manager-actions', managerActionsRoutes);
 //Component-4 Routes
 app.use('/api/consensus', consensusRoutes);
 
+//Component-5 Routes
+app.use('/api/queue', queueRoutes);
 const PORT = process.env.SERVER_PORT || 3000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 

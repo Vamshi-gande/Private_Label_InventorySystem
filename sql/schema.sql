@@ -43,12 +43,16 @@ CREATE TABLE inventory_reservations (
 
 CREATE TABLE inventory_transactions (
     transaction_id SERIAL PRIMARY KEY,
-    inventory_id INT REFERENCES inventory(inventory_id),
-    product_id INT REFERENCES products(product_id),
-    transaction_type VARCHAR(30) NOT NULL, -- RESERVE, RELEASE
-    quantity_change INT NOT NULL,
+    request_id VARCHAR(50),             -- Tracks the original allocation request
+    store_id VARCHAR(50),               -- The store receiving the inventory
+    sku VARCHAR(50),                    -- SKU of the product
+    transaction_type VARCHAR(50),       -- Type of transaction (e.g., ALLOCATE)
+    original_quantity INT,              -- Requested quantity
+    final_quantity INT,                 -- Adjusted quantity after processing
+    processing_queue VARCHAR(50),       -- Which queue processed this (EMERGENCY, HIGH_PRIORITY, STANDARD)
     transaction_timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
 
 CREATE INDEX idx_inventory_available_qty ON inventory(available_quantity);
 CREATE INDEX idx_reservations_expiry ON inventory_reservations(expiry_timestamp) WHERE status = 'ACTIVE';
@@ -145,3 +149,5 @@ CREATE TABLE IF NOT EXISTS regional_consensus_history (
     created_at TIMESTAMP DEFAULT NOW()
 );
 
+--Component-5 (table update checking)
+SELECT * FROM inventory_transactions ORDER BY transaction_timestamp DESC;
