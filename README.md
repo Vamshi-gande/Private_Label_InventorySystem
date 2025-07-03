@@ -1,7 +1,3 @@
-Here’s your **updated README file with Component 5 fully integrated** in the **exact same format and order** as the original.
-
----
-
 # Dynamic Private Label Inventory Management System v2.0
 
 ## Executive Summary
