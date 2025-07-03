@@ -49,6 +49,7 @@ app.use('/api/consensus', consensusRoutes);
 
 //Component-5 Routes
 app.use('/api/queue', queueRoutes);
+
 const PORT = process.env.SERVER_PORT || 3000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 
