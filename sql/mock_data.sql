@@ -98,7 +98,7 @@ INSERT INTO manager_actions (store_id, product_id, action_type, quantity, origin
 (3, 3, 'bulk_order', 400, '2025-07-20', '2025-07-05 10:00:00', 'Summer beverage surge - 300% increase from normal order', 103),
 (4, 4, 'bulk_order', 350, '2025-08-01', '2025-07-10 14:00:00', 'Back-to-school cereal demand - massive order increase', 104);
 
---component-4
+-- component-4
 
 UPDATE stores SET latitude = 40.7128, longitude = -74.0060 WHERE store_name = 'Manhattan Flagship';
 UPDATE stores SET latitude = 40.6950, longitude = -73.9950 WHERE store_name = 'Brooklyn Heights';
@@ -152,3 +152,21 @@ INSERT INTO manager_actions (store_id, product_id, action_type, quantity, origin
 -- Additional quantity adjustment examples
 (3, 3, 'bulk_order', 400, '2025-07-20', '2025-07-05 10:00:00', 'Summer beverage surge - 300% increase from normal order', 103),
 (4, 4, 'bulk_order', 350, '2025-08-01', '2025-07-10 14:00:00', 'Back-to-school cereal demand - massive order increase', 104);
+
+-- Component 6: Store inventory mock data
+INSERT INTO store_inventory (store_id, product_id, sku, current_stock, safety_stock, reserved_quantity, average_daily_sales) VALUES
+(1, 1, 'PL-PASTA-001', 240, 50, 10, 15.5),
+(1, 2, 'PL-SAUCE-002', 180, 30, 5, 8.2),
+(1, 3, 'BR-BREAD-001', 120, 20, 0, 12.0),
+(2, 1, 'PL-PASTA-001', 80, 30, 5, 10.5),
+(2, 2, 'PL-SAUCE-002', 150, 25, 0, 6.8),
+(2, 3, 'BR-BREAD-001', 200, 40, 15, 18.2),
+(3, 1, 'PL-PASTA-001', 320, 60, 20, 22.0),
+(3, 2, 'PL-SAUCE-002', 90, 15, 0, 4.5),
+(3, 3, 'BR-BREAD-001', 160, 25, 10, 14.8)
+ON CONFLICT (store_id, product_id) DO NOTHING;
+
+-- Add store location data for regional priority calculation
+UPDATE stores SET latitude = 40.7831, longitude = -73.9712 WHERE store_id = 1;
+UPDATE stores SET latitude = 40.6962, longitude = -73.9961 WHERE store_id = 2;
+UPDATE stores SET latitude = 40.7589, longitude = -73.9851 WHERE store_id = 3;

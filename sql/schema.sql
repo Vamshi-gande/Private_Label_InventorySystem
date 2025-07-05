@@ -1,4 +1,4 @@
-create table products(
+create table if not exists products(
     product_id serial primary key,
     sku varchar(20) unique not null,
     product_name VARCHAR(255) NOT NULL,
@@ -8,19 +8,19 @@ create table products(
     participate_in_allocation BOOLEAN DEFAULT TRUE
 );
 
-CREATE TABLE warehouses (
+CREATE TABLE IF NOT EXISTS warehouses (
     warehouse_id SERIAL PRIMARY KEY,
     warehouse_name VARCHAR(100) NOT NULL,
     region VARCHAR(50) NOT NULL
 );
 
-CREATE TABLE stores (
+CREATE TABLE IF NOT EXISTS stores (
     store_id SERIAL PRIMARY KEY,
     store_name VARCHAR(100) NOT NULL,
     region VARCHAR(50) NOT NULL
 );
 
-CREATE TABLE inventory (
+CREATE TABLE IF NOT EXISTS inventory (
     inventory_id SERIAL PRIMARY KEY,
     product_id INT REFERENCES products(product_id),
     warehouse_id INT REFERENCES warehouses(warehouse_id),
@@ -30,7 +30,7 @@ CREATE TABLE inventory (
     UNIQUE (product_id, warehouse_id)
 );
 
-CREATE TABLE inventory_reservations (
+CREATE TABLE IF NOT EXISTS inventory_reservations (
     reservation_id SERIAL PRIMARY KEY,
     inventory_id INT REFERENCES inventory(inventory_id),
     product_id INT REFERENCES products(product_id),
@@ -41,7 +41,7 @@ CREATE TABLE inventory_reservations (
     status VARCHAR(20) DEFAULT 'ACTIVE'
 );
 
-CREATE TABLE inventory_transactions (
+CREATE TABLE IF NOT EXISTS inventory_transactions (
     transaction_id SERIAL PRIMARY KEY,
     request_id VARCHAR(50),             -- Tracks the original allocation request
     store_id VARCHAR(50),               -- The store receiving the inventory
@@ -76,7 +76,7 @@ alter column is_private_label set default null;
 
 
 -- Adding new columns to the inventory table(component-2)
-CREATE TABLE classification_rules (
+CREATE TABLE IF NOT EXISTS classification_rules (
     rule_id SERIAL PRIMARY KEY,
     rule_type VARCHAR(50) NOT NULL, -- BRAND or SKU_PATTERN
     rule_pattern VARCHAR(255) NOT NULL, -- Regex or substring
@@ -84,7 +84,7 @@ CREATE TABLE classification_rules (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE priority_profiles (
+CREATE TABLE IF NOT EXISTS priority_profiles (
     profile_id SERIAL PRIMARY KEY,
     product_type VARCHAR(50) NOT NULL, -- PRIVATE_LABEL or THIRD_PARTY
     base_multiplier DECIMAL(3,2) DEFAULT 1.0,
@@ -93,7 +93,7 @@ CREATE TABLE priority_profiles (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE suggested_rules (
+CREATE TABLE IF NOT EXISTS suggested_rules (
     suggestion_id SERIAL PRIMARY KEY,
     rule_type VARCHAR(50),
     rule_pattern VARCHAR(255),
@@ -151,3 +151,39 @@ CREATE TABLE IF NOT EXISTS regional_consensus_history (
 
 --Component-5 (table update checking)
 SELECT * FROM inventory_transactions ORDER BY transaction_timestamp DESC;
+
+-- Component 6: Contribution Scoring Tables
+CREATE TABLE IF NOT EXISTS contribution_history (
+    id SERIAL PRIMARY KEY,
+    from_store_id VARCHAR(10) NOT NULL,
+    to_store_id VARCHAR(10) NOT NULL,
+    sku VARCHAR(50) NOT NULL,
+    contribution_score DECIMAL(10,2),
+    quantity_contributed INT,
+    transfer_success BOOLEAN,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Add transfer success rate to inventory
+ALTER TABLE inventory ADD COLUMN IF NOT EXISTS last_transfer_success_rate DECIMAL(4,3) DEFAULT 0.900;
+
+-- Component 6: Store-level inventory for contribution scoring
+CREATE TABLE IF NOT EXISTS store_inventory (
+    id SERIAL PRIMARY KEY,
+    store_id INT REFERENCES stores(store_id),
+    product_id INT REFERENCES products(product_id),
+    sku VARCHAR(50) NOT NULL,
+    current_stock INT NOT NULL DEFAULT 0,
+    safety_stock INT NOT NULL DEFAULT 0,
+    reserved_quantity INT DEFAULT 0,
+    last_restock_date DATE,
+    average_daily_sales DECIMAL(10,2) DEFAULT 0,
+    last_transfer_success_rate DECIMAL(4,3) DEFAULT 0.900,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE(store_id, product_id)
+);
+
+-- Update contribution_history table to match your ID types
+ALTER TABLE contribution_history ALTER COLUMN from_store_id TYPE INT USING from_store_id::INT;
+ALTER TABLE contribution_history ALTER COLUMN to_store_id TYPE INT USING to_store_id::INT;

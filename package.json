@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node tests/test-comprehensive-manager-actions.js",
+    "test-contribution": "node tests/test-contribution-scoring.js",
+    "start": "node server.js"
   },
   "repository": {
     "type": "git",
