@@ -151,6 +151,37 @@ AI-driven platform that maximizes retail profitability by strategically optimizi
   * Automated inventory logging
   * Auditable transaction records
 
+#### Component 6: Contribution Scoring Algorithm (COMPLETE)
+
+* Status: Fully implemented and tested
+* Location: `controllers/contributionController.js`, `services/contributionScorer.js`, `routes/contribution.js`
+* Features:
+
+  * Store-to-store inventory contribution scoring
+  * Dynamic boundaries (15-60% for private label, 10-40% for third-party)
+  * Multi-factor scoring algorithm:
+    * Available stock calculation (current stock - safety stock - reserved)
+    * Demand stability based on sales velocity and manager actions
+    * Regional priority based on store proximity
+    * Transfer efficiency based on historical success
+    * Private label multiplier (1.5x for private label products)
+  * Batch analysis for multiple inventory requests
+  * Contribution history tracking
+  * Store inventory management
+  * Manager action integration for behavioral intelligence
+
+* API Endpoints:
+
+  * `GET /api/contribution/score/:fromStore/:toStore/:sku` - Get contribution score
+  * `POST /api/contribution/find-contributors` - Find potential contributors
+  * `POST /api/contribution/batch-analysis` - Process multiple requests
+  * `GET /api/contribution/history/:storeId` - Get contribution history
+  * `POST /api/contribution/record` - Record contribution transaction
+  * `GET /api/contribution/store-inventory/:storeId` - Get store inventory
+
+* Documentation:
+  * Detailed documentation available in `docs/contribution_scoring_algorithm.md`
+
 ### PARTIALLY IMPLEMENTED COMPONENTS
 
 #### Component 1 Extensions: Atomic Inventory Management
@@ -161,16 +192,6 @@ AI-driven platform that maximizes retail profitability by strategically optimizi
 * Location: `controllers/inventoryController.js`
 
 ## PENDING IMPLEMENTATION
-
-### Component 6: Contribution Scoring Algorithm
-
-* Purpose: Calculate store contribution capacity for inventory sharing
-* Dependencies: Inventory data, behavioral intelligence
-* Features Needed:
-
-  * Mathematical scoring based on multiple factors
-  * Dynamic boundaries (15-60% private label, 10-40% third-party)
-  * Real-time calculation during allocation cycles
 
 ### Component 7: Warehouse-Centric Transfer System
 
@@ -277,6 +298,8 @@ AI-driven platform that maximizes retail profitability by strategically optimizi
 * Classification Rules: Automated product categorization
 * Priority Profiles: Dynamic allocation multipliers
 * Inventory Transactions: Logs processed allocations from the multi-queue system
+* Store Inventory: Store-level inventory tracking for contribution scoring
+* Contribution History: Records of inventory contributions between stores
 
 ## Getting Started
 
@@ -331,17 +354,12 @@ node server.js
 ### Testing the Implementation
 
 ```bash
-# Test database connection
-node test-db.js
-
-# Test API endpoints
-node test-api.js
-
-# Test behavioral analyzer
-node test-behavioral-analyzer.js
-
-# Test manager actions scheduler
-node test-manager-scheduler.js
+# Test component implementations
+node tests/test-contribution-scoring.js
+node tests/test-classification-engine.js
+node tests/test-economic-indicators.js
+node tests/test-comprehensive-manager-actions.js
+node tests/test-manager-scheduler.js
 ```
 
 ---
@@ -386,6 +404,15 @@ node test-manager-scheduler.js
 * `GET /api/queue/status` - View current queue status
 * `POST /api/queue/load-demo` - Load mock allocation requests
 * `GET /api/queue/demo` - Run demo processing cycle
+
+### Contribution Scoring System
+
+* `GET /api/contribution/score/:fromStore/:toStore/:sku` - Get contribution score
+* `POST /api/contribution/find-contributors` - Find potential contributors
+* `POST /api/contribution/batch-analysis` - Process multiple requests
+* `GET /api/contribution/history/:storeId` - Get contribution history
+* `POST /api/contribution/record` - Record contribution transaction
+* `GET /api/contribution/store-inventory/:storeId` - Get store inventory
 
 ### Analytics & Dashboard
 
