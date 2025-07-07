@@ -108,9 +108,9 @@ SIMULATE_EXTERNAL_APIS=true  # Use when API keys aren't available
 
 ### Success Criteria
 
-- **✅ Passed**: Test completed successfully
-- **⚠️ Warning**: Non-critical issues detected
-- **❌ Failed**: Critical issues requiring attention
+- **Passed**: Test completed successfully
+- **Warning**: Non-critical issues detected
+- **Failed**: Critical issues requiring attention
 
 ## Metrics
 

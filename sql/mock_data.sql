@@ -170,3 +170,64 @@ ON CONFLICT (store_id, product_id) DO NOTHING;
 UPDATE stores SET latitude = 40.7831, longitude = -73.9712 WHERE store_id = 1;
 UPDATE stores SET latitude = 40.6962, longitude = -73.9961 WHERE store_id = 2;
 UPDATE stores SET latitude = 40.7589, longitude = -73.9851 WHERE store_id = 3;
+
+-- Component 7: Warehouse Transfer System Mock Data
+
+-- Update warehouses with coordinates for distance calculations
+UPDATE warehouses SET 
+    latitude = CASE warehouse_id
+        WHEN 1 THEN 40.7128  -- East Coast (NYC area)
+        WHEN 2 THEN 41.8781  -- Midwest (Chicago area)
+        WHEN 3 THEN 34.0522  -- West Coast (LA area)
+        ELSE NULL
+    END,
+    longitude = CASE warehouse_id  
+        WHEN 1 THEN -74.0060 -- East Coast (NYC area)
+        WHEN 2 THEN -87.6298 -- Midwest (Chicago area)
+        WHEN 3 THEN -118.2437 -- West Coast (LA area)
+        ELSE NULL
+    END
+WHERE warehouse_id IN (1, 2, 3);
+
+-- Insert sample warehouse capacity data
+INSERT INTO warehouse_capacity (warehouse_id, date, max_capacity, current_utilization, incoming_scheduled, outgoing_scheduled) 
+VALUES 
+    (1, CURRENT_DATE, 1000, 250, 50, 100),  -- East Coast Distribution Center
+    (2, CURRENT_DATE, 600, 180, 30, 60),    -- Central Distribution Hub  
+    (3, CURRENT_DATE, 300, 120, 20, 40)     -- West Coast Fulfillment
+ON CONFLICT (warehouse_id, date) DO UPDATE SET
+    max_capacity = EXCLUDED.max_capacity,
+    current_utilization = EXCLUDED.current_utilization,
+    incoming_scheduled = EXCLUDED.incoming_scheduled,
+    outgoing_scheduled = EXCLUDED.outgoing_scheduled;
+
+-- Insert sample transfer routes with costs
+INSERT INTO transfer_routes (from_warehouse_id, to_store_id, distance_km, estimated_time_hours, base_cost, active) VALUES
+    -- East Coast Warehouse to Stores
+    (1, 1, 15.2, 1.5, 25.00, true),   -- To Manhattan Flagship
+    (1, 2, 22.8, 2.0, 35.00, true),   -- To Brooklyn Heights
+    (1, 3, 790.5, 12.0, 450.00, true), -- To Chicago Loop (cross-region)
+    (1, 4, 2445.0, 36.0, 1200.00, true), -- To LA Beverly (cross-region)
+    
+    -- Central Warehouse to Stores  
+    (2, 1, 790.5, 12.0, 450.00, true), -- To Manhattan (cross-region)
+    (2, 2, 815.3, 13.0, 475.00, true), -- To Brooklyn (cross-region)
+    (2, 3, 18.7, 1.8, 30.00, true),   -- To Chicago Loop
+    (2, 4, 1745.2, 26.0, 850.00, true), -- To LA Beverly (cross-region)
+    
+    -- West Coast Warehouse to Stores
+    (3, 1, 2445.0, 36.0, 1200.00, true), -- To Manhattan (cross-region)
+    (3, 2, 2470.8, 37.0, 1225.00, true), -- To Brooklyn (cross-region) 
+    (3, 3, 1745.2, 26.0, 850.00, true), -- To Chicago (cross-region)
+    (3, 4, 25.4, 2.5, 40.00, true);   -- To LA Beverly
+
+-- Insert sample warehouse performance metrics
+INSERT INTO warehouse_performance (warehouse_id, date, success_rate, avg_processing_time_hours, capacity_utilization, cost_efficiency_score) VALUES
+    (1, CURRENT_DATE, 96.5, 2.3, 25.0, 85.2),  -- East Coast performing well
+    (2, CURRENT_DATE, 94.8, 2.8, 30.0, 82.7),  -- Central performing well
+    (3, CURRENT_DATE, 91.2, 3.5, 40.0, 78.9)   -- West Coast needs improvement
+ON CONFLICT (warehouse_id, date) DO UPDATE SET
+    success_rate = EXCLUDED.success_rate,
+    avg_processing_time_hours = EXCLUDED.avg_processing_time_hours,
+    capacity_utilization = EXCLUDED.capacity_utilization,
+    cost_efficiency_score = EXCLUDED.cost_efficiency_score;
