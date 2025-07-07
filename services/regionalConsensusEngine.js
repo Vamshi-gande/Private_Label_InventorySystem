@@ -12,7 +12,7 @@ class RegionalConsensusEngine {
     async initializeRegionalClusters(stores, managerActions) {
         const clusters = clusterStores(stores, managerActions);
         this.regionalClusters = new Map(Object.entries(clusters));
-        console.log('✅ Regional clusters initialized:', Array.from(this.regionalClusters.keys()));
+        console.log('Regional clusters initialized:', Array.from(this.regionalClusters.keys()));
     }
 
     getStoreRegion(storeId) {
@@ -67,7 +67,7 @@ class RegionalConsensusEngine {
         }
 
         const signalTypes = this.groupSignalsByType(signals);
-        console.log(`🗺️ Region: ${region}`);
+        console.log(`Region: ${region}`);
         console.log('Signal Type Distribution:', Array.from(signalTypes.entries()));
         console.log('Total Signals in Region:', signals.length);
 
@@ -120,7 +120,7 @@ class RegionalConsensusEngine {
         const averageConfidence = this.calculateWeightedConfidence(weightedSignals);
         const consensusStrength = participationRate * averageConfidence;
 
-        console.log(`📊 Signal Type: ${signalType} in ${region}`);
+        console.log(`Signal Type: ${signalType} in ${region}`);
         console.log(`Participation Rate: ${participationRate}`);
         console.log(`Average Confidence: ${averageConfidence}`);
         console.log(`Consensus Strength: ${consensusStrength}`);

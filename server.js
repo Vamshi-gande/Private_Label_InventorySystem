@@ -31,6 +31,9 @@ const queueRoutes = require('./routes/queueRoutes');
 //Component-6
 const contributionRoutes = require('./routes/contribution');
 
+//Component-7
+const warehouseTransferRoutes = require('./routes/warehouseTransfer');
+
 app.use(express.json());
 
 //Component-1 Routes
@@ -55,6 +58,9 @@ app.use('/api/queue', queueRoutes);
 
 //Component-6 Routes
 app.use('/api/contribution', contributionRoutes);
+
+//Component-7 Routes
+app.use('/api/warehouse-transfer', warehouseTransferRoutes);
 
 const PORT = process.env.SERVER_PORT || 3000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

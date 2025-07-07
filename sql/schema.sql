@@ -184,6 +184,98 @@ CREATE TABLE IF NOT EXISTS store_inventory (
     UNIQUE(store_id, product_id)
 );
 
--- Update contribution_history table to match your ID types
+-- Update contribution_history table to match ID types
 ALTER TABLE contribution_history ALTER COLUMN from_store_id TYPE INT USING from_store_id::INT;
 ALTER TABLE contribution_history ALTER COLUMN to_store_id TYPE INT USING to_store_id::INT;
+
+-- Component 7: Warehouse Transfer System Schema Extensions
+
+-- Transfer Requests Table
+CREATE TABLE IF NOT EXISTS transfer_requests (
+    id SERIAL PRIMARY KEY,
+    request_id VARCHAR(50) UNIQUE NOT NULL,
+    from_store_id INTEGER REFERENCES stores(store_id),
+    to_store_id INTEGER REFERENCES stores(store_id),
+    sku VARCHAR(100) NOT NULL,
+    quantity INTEGER NOT NULL,
+    priority VARCHAR(20) DEFAULT 'standard', -- 'high', 'standard', 'emergency'
+    status VARCHAR(20) DEFAULT 'pending', -- 'pending', 'approved', 'in_transit', 'completed', 'failed'
+    warehouse_route JSONB, -- Stores the warehouse routing path
+    estimated_cost DECIMAL(10,2),
+    notes TEXT,
+    emergency_reason VARCHAR(255),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Transfer Batches Table
+CREATE TABLE IF NOT EXISTS transfer_batches (
+    id SERIAL PRIMARY KEY,
+    batch_id VARCHAR(50) UNIQUE NOT NULL,
+    warehouse_id INTEGER REFERENCES warehouses(warehouse_id),
+    status VARCHAR(20) DEFAULT 'preparing', -- 'preparing', 'ready', 'in_transit', 'completed'
+    total_requests INTEGER DEFAULT 0,
+    total_cost DECIMAL(10,2) DEFAULT 0,
+    scheduled_departure TIMESTAMP,
+    actual_departure TIMESTAMP,
+    estimated_arrival TIMESTAMP,
+    actual_arrival TIMESTAMP,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Transfer Batch Items Table
+CREATE TABLE IF NOT EXISTS transfer_batch_items (
+    id SERIAL PRIMARY KEY,
+    batch_id INTEGER REFERENCES transfer_batches(id),
+    transfer_request_id INTEGER REFERENCES transfer_requests(id),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Warehouse Capacity Tracking
+CREATE TABLE IF NOT EXISTS warehouse_capacity (
+    id SERIAL PRIMARY KEY,
+    warehouse_id INTEGER REFERENCES warehouses(warehouse_id),
+    date DATE NOT NULL,
+    max_capacity INTEGER NOT NULL,
+    current_utilization INTEGER DEFAULT 0,
+    incoming_scheduled INTEGER DEFAULT 0,
+    outgoing_scheduled INTEGER DEFAULT 0,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE(warehouse_id, date)
+);
+
+-- Transfer Routes (for cost optimization)
+CREATE TABLE IF NOT EXISTS transfer_routes (
+    id SERIAL PRIMARY KEY,
+    from_warehouse_id INTEGER REFERENCES warehouses(warehouse_id),
+    to_store_id INTEGER REFERENCES stores(store_id),
+    distance_km DECIMAL(8,2),
+    estimated_time_hours DECIMAL(4,2),
+    base_cost DECIMAL(10,2),
+    active BOOLEAN DEFAULT true,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Warehouse Performance Metrics
+CREATE TABLE IF NOT EXISTS warehouse_performance (
+    id SERIAL PRIMARY KEY,
+    warehouse_id INTEGER REFERENCES warehouses(warehouse_id),
+    date DATE NOT NULL,
+    success_rate DECIMAL(5,2) DEFAULT 100.00,
+    avg_processing_time_hours DECIMAL(6,2),
+    capacity_utilization DECIMAL(5,2),
+    cost_efficiency_score DECIMAL(5,2),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE(warehouse_id, date)
+);
+
+-- Indexes for performance
+CREATE INDEX IF NOT EXISTS idx_transfer_requests_status ON transfer_requests(status);
+CREATE INDEX IF NOT EXISTS idx_transfer_requests_priority ON transfer_requests(priority);
+CREATE INDEX IF NOT EXISTS idx_transfer_requests_created_at ON transfer_requests(created_at);
+CREATE INDEX IF NOT EXISTS idx_transfer_batches_warehouse_id ON transfer_batches(warehouse_id);
+CREATE INDEX IF NOT EXISTS idx_transfer_batches_status ON transfer_batches(status);
+CREATE INDEX IF NOT EXISTS idx_warehouse_capacity_date ON warehouse_capacity(warehouse_id, date);
+
+ALTER TABLE warehouses ADD COLUMN IF NOT EXISTS latitude DECIMAL(9,6);
+ALTER TABLE warehouses ADD COLUMN IF NOT EXISTS longitude DECIMAL(9,6);

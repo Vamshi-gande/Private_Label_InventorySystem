@@ -1,10 +1,10 @@
-# 📚 Component 4: Regional Consensus Engine
+# Component 4: Regional Consensus Engine
 
 ### Part of: Dynamic Private Label Inventory Management System
 
 ---
 
-## 📌 **1. Overview of Component 4**
+## **1. Overview of Component 4**
 
 The **Regional Consensus Engine** is responsible for **validating behavioral intelligence signals across multiple stores in a region** to ensure that inventory and allocation decisions are not based on isolated manager actions but on collective regional behavior.
 
@@ -18,7 +18,7 @@ It dynamically **clusters stores into regions** and continuously **evaluates con
 
 ---
 
-## ⚙️ **2. Key Functionalities**
+## 2. Key Functionalities
 
 | Feature                     | Description                                                                                                      |
 | --------------------------- | ---------------------------------------------------------------------------------------------------------------- |
@@ -30,7 +30,7 @@ It dynamically **clusters stores into regions** and continuously **evaluates con
 
 ---
 
-## 🗂️ **3. Folder & File Structure**
+## 3. Folder & File Structure
 
 ### `/services/regionalConsensusEngine.js`
 
@@ -75,7 +75,7 @@ module.exports = {
 
 ---
 
-## 🔑 **4. Configuration Parameters**
+## **4. Configuration Parameters**
 
 | Parameter                   | Purpose                                                         | Default |
 | --------------------------- | --------------------------------------------------------------- | ------- |
@@ -85,9 +85,9 @@ module.exports = {
 
 ---
 
-## 🔍 **5. Testing Approach**
+## 5. Testing Approach
 
-### ✅ **Mock Data Used:**
+### Mock Data Used:
 
 * Simulated stores with latitude and longitude for clustering.
 * Pre-inserted manager actions with extracted intelligence:
@@ -108,7 +108,7 @@ WHERE action_type = 'safety_stock_increase';
 
 ---
 
-### ✅ **Functional Testing Steps:**
+### Functional Testing Steps:
 
 1. Loaded clustered regions using mock store location data.
 2. Inserted behavioral intelligence signals into the database.
@@ -123,7 +123,7 @@ WHERE action_type = 'safety_stock_increase';
 
 ---
 
-### ✅ **Edge Cases Tested:**
+### Edge Cases Tested:
 
 * Stores showing conflicting signals within a region.
 * Insufficient number of stores in a region.
@@ -132,7 +132,7 @@ WHERE action_type = 'safety_stock_increase';
 
 ---
 
-## 📡 **6. API Endpoints Implemented**
+## **6. API Endpoints Implemented**
 
 | Method | Endpoint                   | Purpose                                                                            |
 | ------ | -------------------------- | ---------------------------------------------------------------------------------- |
@@ -142,7 +142,7 @@ WHERE action_type = 'safety_stock_increase';
 
 ---
 
-## 📈 **7. Outputs Generated**
+## 7. Outputs Generated
 
 Example of a **Consensus Report:**
 
@@ -175,20 +175,20 @@ Example of a **Consensus Report:**
 
 ---
 
-## ✅ **Summary of Component 4 Implementation:**
+## Summary of Component 4 Implementation:
 
 | Feature                       | Status        |
 | ----------------------------- | ------------- |
-| Dynamic Clustering            | ✅ Implemented |
-| Consensus Calculation         | ✅ Implemented |
-| Emergency Detection           | ✅ Implemented |
-| API Endpoints                 | ✅ Implemented |
-| Real-Time Consensus Reporting | ✅ Implemented |
-| Mock Data Testing             | ✅ Completed   |
+| Dynamic Clustering            | Implemented |
+| Consensus Calculation         | Implemented |
+| Emergency Detection           | Implemented |
+| API Endpoints                 | Implemented |
+| Real-Time Consensus Reporting | Implemented |
+| Mock Data Testing             | Completed   |
 
 ---
 
-## 🚀 **How This Component Connects to Others:**
+## How This Component Connects to Others:
 
 * **Uses:** Manager actions (Component 3) and store/product metadata (Component 1).
 * **Feeds Into:** Component 5 (Multi-Queue Processing) to prioritize high-confidence regional signals.
