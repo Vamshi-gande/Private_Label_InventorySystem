@@ -1,8 +1,9 @@
 import axios from 'axios';
+import { API_BASE_URL } from '@/config';
 
 const api = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:3000',
-  withCredentials: true,
+  baseURL: API_BASE_URL,
+  timeout: 10000,
 });
 
 api.interceptors.request.use(
@@ -18,6 +19,8 @@ api.interceptors.response.use(
   (error) => {
     if (error.response) {
       console.error(`[API] Error ${error.response.status}:`, error.response.data ?? error.message);
+    } else if (error.request) {
+      console.error('[API] Network error or no response received', error.message);
     }
     return Promise.reject(error);
   },

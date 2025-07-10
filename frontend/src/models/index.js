@@ -1,1 +1,1 @@
-// Shared JS models and interfaces go here. 
+// Shared JS models and interfaces go here.

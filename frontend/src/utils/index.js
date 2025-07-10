@@ -1,1 +1,1 @@
-// Utility helper functions to be shared across the app. 
+// Utility helper functions to be shared across the app.

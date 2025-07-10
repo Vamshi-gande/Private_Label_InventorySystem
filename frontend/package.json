@@ -11,6 +11,8 @@
     "prepare": "husky install"
   },
   "dependencies": {
+    "@tanstack/react-query": "^5.82.0",
+    "@tanstack/react-query-devtools": "^5.82.0",
     "axios": "^1.10.0",
     "clsx": "^2.1.0",
     "husky": "^9.1.7",
