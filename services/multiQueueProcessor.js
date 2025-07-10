@@ -47,7 +47,10 @@ class MultiQueueProcessor {
 
     async getBehavioralSignal(storeId, productId) {
         try {
-            const response = await axios.get('http://localhost:3000/api/manager-actions/signals');
+            const PORT = process.env.SERVER_PORT || 5000;
+            const API_BASE_URL = process.env.API_BASE_URL || `http://localhost:${PORT}`;
+
+            const response = await axios.get(`${API_BASE_URL}/api/manager-actions/signals`);
             const signals = response.data;
 
             const signal = signals.find(s => s.store_id === storeId && s.product_id === productId);

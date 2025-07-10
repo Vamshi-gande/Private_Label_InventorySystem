@@ -2,6 +2,13 @@ require('dotenv').config();
 const express = require('express');
 const app = express();
 
+
+const cors = require('cors');
+app.use(cors({
+    origin: process.env.CORS_ORIGIN || 'http://localhost:3000',
+    credentials: true,
+}));
+
 //Cleanup Scheduler
 const cronScheduler = require('./cron/cleanupScheduler');
 
