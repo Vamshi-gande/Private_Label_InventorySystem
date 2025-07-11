@@ -1,0 +1,36 @@
+{
+  "name": "frontend",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "format": "prettier --write .",
+    "prepare": "husky install"
+  },
+  "dependencies": {
+    "@tanstack/react-query": "^5.82.0",
+    "@tanstack/react-query-devtools": "^5.82.0",
+    "axios": "^1.10.0",
+    "clsx": "^2.1.0",
+    "husky": "^9.1.7",
+    "next": "15.3.5",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "devDependencies": {
+    "@eslint/eslintrc": "^3",
+    "@tailwindcss/postcss": "^4",
+    "eslint": "^9",
+    "eslint-config-next": "15.3.5",
+    "eslint-plugin-prettier": "^5.5.1",
+    "lint-staged": "^15.2.0",
+    "prettier": "^3.2.5",
+    "tailwindcss": "^4"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx,json,css,md}": "prettier --write"
+  }
+}

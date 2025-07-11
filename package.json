@@ -6,7 +6,12 @@
   "scripts": {
     "test": "node tests/test-comprehensive-manager-actions.js",
     "test-contribution": "node tests/test-contribution-scoring.js",
-    "start": "node server.js"
+    "start": "node server.js",
+    "dev": "concurrently \"npm run server\" \"npm run frontend\"",
+    "server": "node server.js",
+    "frontend": "cd frontend && npm run dev",
+    "build": "cd frontend && npm run build",
+    "install-all": "npm install && cd frontend && npm install"
   },
   "repository": {
     "type": "git",
@@ -26,6 +31,10 @@
     "express": "^5.1.0",
     "ml-kmeans": "^6.0.0",
     "node-cron": "^4.1.1",
-    "pg": "^8.16.3"
+    "pg": "^8.16.3",
+    "cors": "^2.8.5"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.0"
   }
 }

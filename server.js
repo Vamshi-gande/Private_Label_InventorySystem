@@ -8,13 +8,6 @@ const cronScheduler = require('./cron/cleanupScheduler');
 //Component-3 Manager Actions Scheduler
 const managerActionsScheduler = require('./cron/managerActionsScheduler');
 
-//Component-8 Cluster Initialization Scheduler
-const initializeDefaultClusters = require('./cron/initializeClusters');
-
-(async () => {
-    await initializeDefaultClusters(); // Run on startup
-})();
-
 //Component-1
 const reservationRoutes = require('./routes/reservations');
 const inventoryRoutes = require('./routes/inventory');
@@ -40,9 +33,6 @@ const contributionRoutes = require('./routes/contribution');
 
 //Component-7
 const warehouseTransferRoutes = require('./routes/warehouseTransfer');
-
-//component-8
-const clusterRoutes = require('./routes/clusterRoutes');
 
 app.use(express.json());
 
@@ -71,9 +61,6 @@ app.use('/api/contribution', contributionRoutes);
 
 //Component-7 Routes
 app.use('/api/warehouse-transfer', warehouseTransferRoutes);
-
-//component-8 Routes
-app.use('/api/cluster-manager', clusterRoutes);
 
 const PORT = process.env.SERVER_PORT || 3000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

@@ -1,7 +1,8 @@
 require('dotenv').config();
 const axios = require('axios');
 
-const BASE_URL = 'http://localhost:3000/api';
+const API_BASE_URL = process.env.API_BASE_URL || 'http://localhost:5000';
+const BASE_URL = `${API_BASE_URL}/api`;
 
 async function testComponent7Integration() {
     console.log('Testing Component 7 Integration with Existing Components\n');
