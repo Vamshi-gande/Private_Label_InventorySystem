@@ -358,6 +358,35 @@ class WarehouseTransferService {
             client.release();
         }
     }
+
+    async getSimpleWarehouseStatus(warehouseId) {
+        const client = await pool.connect();
+        try {
+            const result = await client.query(`
+                SELECT max_capacity, current_utilization,
+                    ROUND((current_utilization::decimal / NULLIF(max_capacity, 0)) * 100, 2) AS utilization_percentage
+                    FROM warehouse_capacity
+                    WHERE warehouse_id = $1 AND date = CURRENT_DATE
+                `, [warehouseId]);
+            return result.rows[0] || null;
+        } finally {
+            client.release();
+        }
+    }
+
+    async getRouteCost(storeId, warehouseId) {
+        const client = await pool.connect();
+        try {
+            const result = await client.query(`
+                SELECT * FROM transfer_routes
+                WHERE to_store_id = $1 AND from_warehouse_id = $2 AND active = true
+                LIMIT 1
+            `, [storeId, warehouseId]);
+            return result.rows[0] || null;
+        } finally {
+            client.release();
+        }
+    }
 }
 
 module.exports = new WarehouseTransferService();

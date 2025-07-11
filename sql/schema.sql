@@ -279,3 +279,15 @@ CREATE INDEX IF NOT EXISTS idx_warehouse_capacity_date ON warehouse_capacity(war
 
 ALTER TABLE warehouses ADD COLUMN IF NOT EXISTS latitude DECIMAL(9,6);
 ALTER TABLE warehouses ADD COLUMN IF NOT EXISTS longitude DECIMAL(9,6);
+
+--component-8
+
+ALTER TABLE stores ADD COLUMN IF NOT EXISTS annual_revenue DECIMAL(15,2) DEFAULT 0.00;
+ALTER TABLE stores ADD COLUMN IF NOT EXISTS warehouse_id int;
+ALTER TABLE stores ADD COLUMN IF NOT EXISTS region VARCHAR(50);
+
+ALTER TABLE stores
+ADD CONSTRAINT fk_warehouse
+FOREIGN KEY (warehouse_id)
+REFERENCES warehouses(warehouse_id)
+ON DELETE SET NULL;

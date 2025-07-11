@@ -30,6 +30,23 @@ class RegionalConsensusEngine {
 
         for (const [region, signals] of regionalSignals) {
             const consensus = this.calculateRegionalConsensus(region, signals);
+
+            // Attach validated signal to relevant stores
+            const storeIds = new Set(signals.map(s => s.store_id));
+            const regionStores = this.regionalClusters.get(region) || [];
+            regionStores.forEach(store => {
+                if (storeIds.has(store.store_id)) {
+                    if (!store.validated_signals) store.validated_signals = [];
+                    store.validated_signals.push({
+                        product_id: signals.find(s => s.store_id === store.store_id)?.product_id || null,
+                        signal: consensus.signal_type,
+                        confidence: consensus.confidence,
+                        consensus_strength: consensus.consensus_strength,
+                        timestamp: new Date().toISOString()
+                    });
+                }
+            });
+
             consensusResults.set(region, consensus);
         }
 
@@ -150,7 +167,7 @@ class RegionalConsensusEngine {
     }
 
     getManagerWeight(managerId) {
-        return this.performanceWeights.get(managerId) || 0.8; // Boosted default for testing
+        return this.performanceWeights.get(managerId) || 0.8;
     }
 
     updateManagerWeights(accuracyData) {
@@ -223,6 +240,18 @@ class RegionalConsensusEngine {
         } else {
             return `Weak or conflicting signals in region`;
         }
+    }
+
+    // ✅ Public method for C5 to pull consensus signals
+    getLiveSignalForStore(storeId, productId) {
+        for (const stores of this.regionalClusters.values()) {
+            for (const store of stores) {
+                if (store.store_id === storeId && store.validated_signals) {
+                    return store.validated_signals.find(sig => sig.product_id === productId) || null;
+                }
+            }
+        }
+        return null;
     }
 }
 

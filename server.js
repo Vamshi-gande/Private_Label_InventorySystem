@@ -2,13 +2,6 @@ require('dotenv').config();
 const express = require('express');
 const app = express();
 
-
-const cors = require('cors');
-app.use(cors({
-    origin: process.env.CORS_ORIGIN || 'http://localhost:3000',
-    credentials: true,
-}));
-
 //Cleanup Scheduler
 const cronScheduler = require('./cron/cleanupScheduler');
 
@@ -69,6 +62,6 @@ app.use('/api/contribution', contributionRoutes);
 //Component-7 Routes
 app.use('/api/warehouse-transfer', warehouseTransferRoutes);
 
-const PORT = process.env.SERVER_PORT || 5000;
+const PORT = process.env.SERVER_PORT || 3000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 
