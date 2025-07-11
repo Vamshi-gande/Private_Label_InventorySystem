@@ -231,3 +231,43 @@ ON CONFLICT (warehouse_id, date) DO UPDATE SET
     avg_processing_time_hours = EXCLUDED.avg_processing_time_hours,
     capacity_utilization = EXCLUDED.capacity_utilization,
     cost_efficiency_score = EXCLUDED.cost_efficiency_score;
+
+--component-8
+-- Insert sample warehouses
+INSERT INTO warehouses (warehouse_id, warehouse_name, latitude, longitude, region) VALUES
+('001', 'NYC Regional', 40.7282, -74.0776, 'northeast'),
+('002', 'Chicago Central', 41.8781, -87.6298, 'midwest'),
+('003', 'LA Distribution', 34.0522, -118.2437, 'west'),
+('004', 'Miami Southeast', 25.7617, -80.1918, 'southeast');
+
+-- Insert sample warehouse capacity
+INSERT INTO warehouse_capacity (warehouse_id, date, max_capacity, current_utilization, incoming_scheduled) VALUES
+('001', CURRENT_DATE, 1000, 300, 50),
+('002', CURRENT_DATE, 1200, 900, 100),
+('003', CURRENT_DATE, 1500, 200, 100),
+('004', CURRENT_DATE, 800, 600, 50);
+
+-- Insert sample stores
+INSERT INTO stores (store_id, store_name, latitude, longitude, warehouse_id, annual_revenue, region) VALUES
+('001', 'Downtown Manhattan', 40.7831, -73.9712, '001', 15000000, 'northeast'),
+('002', 'Brooklyn Heights', 40.6962, -73.9961, '001', 8000000, 'northeast'),
+('003', 'Queens Plaza', 40.7505, -73.9370, '001', 12000000, 'northeast'),
+('004', 'Chicago Loop', 41.8781, -87.6298, '002', 18000000, 'midwest'),
+('005', 'Chicago North', 41.9278, -87.6431, '002', 10000000, 'midwest'),
+('006', 'LA Beverly Hills', 34.0736, -118.4004, '003', 22000000, 'west'),
+('007', 'LA Santa Monica', 34.0195, -118.4912, '003', 16000000, 'west'),
+('008', 'Miami Beach', 25.7907, -80.1300, '004', 14000000, 'southeast');
+
+-- Insert sample products
+INSERT INTO products (product_id, sku, product_name, brand, category, is_private_label, profit_margin_percentage, sales_velocity, base_priority, calculated_priority, supplier_id, unit_cost, selling_price, participate_in_allocation) VALUES
+(1, 'PL-PASTA-001', 'Private Pasta', 'Store Brand', 'Food', true, 45, 75, 1.5, 4.75, 101, 1.25, 3.99, true),
+(2, 'TP-JUICE-001', 'Orange Juice', 'Minute Maid', 'Beverages', false, 30, 50, 1.0, 2.50, 102, 0.90, 2.49, true);
+
+-- Insert store_inventory mapping
+INSERT INTO store_inventory (store_id, product_id, current_stock, reserved_quantity, safety_stock, sku) VALUES
+('001', 1, 300, 20, 50, 'PL-PASTA-001'),
+('004', 2, 500, 10, 50, 'TP-JUICE-001');
+
+truncate table products cascade;
+truncate table warehouses cascade;
+TRUNCATE TABLE stores CASCADE;
