@@ -3,6 +3,12 @@ const pool = require('../config/db');
 exports.getInventoryStatus = async (req, res) => {
     const { productId } = req.params;
 
+    // Validate that productId is a positive integer
+    const numericProductId = parseInt(productId, 10);
+    if (Number.isNaN(numericProductId) || numericProductId <= 0) {
+        return res.status(400).json({ error: 'Invalid product ID. It must be a positive integer.' });
+    }
+
     try {
         const query = `
             SELECT 
@@ -20,7 +26,7 @@ exports.getInventoryStatus = async (req, res) => {
             WHERE i.product_id = $1
         `;
 
-        const result = await pool.query(query, [productId]);
+        const result = await pool.query(query, [numericProductId]);
 
         if (result.rows.length === 0) {
             return res.status(404).json({ error: 'Inventory not found for this product.' });
@@ -29,7 +35,7 @@ exports.getInventoryStatus = async (req, res) => {
         const totalAvailable = result.rows.reduce((sum, row) => sum + row.available_quantity, 0);
         const totalReserved = result.rows.reduce((sum, row) => sum + row.reserved_quantity, 0);
 
-        res.json({
+        return res.json({
             success: true,
             product: result.rows[0].product_name,
             isPrivateLabel: result.rows[0].is_private_label,
@@ -37,12 +43,13 @@ exports.getInventoryStatus = async (req, res) => {
             inventoryByWarehouse: result.rows,
             summary: {
                 totalAvailable,
-                totalReserved
-            }
+                totalReserved,
+            },
         });
 
-    } catch (error) {
-        console.error('Error fetching inventory:', error);
-        res.status(500).json({ error: 'Internal server error.' });
+    } catch (err) {
+        console.error('Error fetching inventory:', err);
+        // Provide a more specific error message if available, but avoid leaking sensitive details
+        return res.status(500).json({ error: 'Internal server error while retrieving inventory.' });
     }
 };

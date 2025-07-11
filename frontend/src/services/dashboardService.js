@@ -2,7 +2,7 @@ import { apiClient } from '@/lib/api';
 
 /**
  * Dashboard Statistics Service
- * Handles all dashboard-related API interactions 
+ * Handles all dashboard-related API interactions
  */
 class DashboardService {
   /**
