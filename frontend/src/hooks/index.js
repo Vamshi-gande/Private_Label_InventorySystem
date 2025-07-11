@@ -5,3 +5,4 @@ export { useInventory } from './useInventory';
 export { useReservations } from './useReservations';
 export { useClassificationRules } from './useClassificationRules';
 export { useManagerSignals } from './useManagerSignals';
+export { useConsensusReport } from './useConsensusReport';
