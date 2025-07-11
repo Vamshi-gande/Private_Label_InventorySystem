@@ -2,3 +2,5 @@
 export { useHealth } from './useHealth';
 export { useDashboardStats } from './useDashboardStats';
 export { useInventory } from './useInventory';
+export { useReservations } from './useReservations';
+export { useClassificationRules } from './useClassificationRules';
