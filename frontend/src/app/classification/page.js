@@ -12,12 +12,20 @@ export default function Classification() {
     error,
     addRule,
     addRuleStatus,
+    deleteRule,
+    deleteRuleStatus,
   } = useClassificationRules();
 
   const rules = data?.rules ?? [];
 
   const onAddRule = (payload) => {
     addRule(payload);
+  };
+
+  const onDeleteRule = (ruleId) => {
+    if (window.confirm('Are you sure you want to delete this classification rule?')) {
+      deleteRule(ruleId);
+    }
   };
 
   return (
@@ -51,7 +59,21 @@ export default function Classification() {
       )}
 
       {/* Rules table */}
-      <ClassificationRulesTable rows={rules} isLoading={isLoading} error={error?.message} />
+      <ClassificationRulesTable 
+        rows={rules} 
+        isLoading={isLoading} 
+        error={error?.message} 
+        onDeleteRule={onDeleteRule}
+        deleteRuleStatus={deleteRuleStatus}
+      />
+      
+      {/* Delete status messages */}
+      {deleteRuleStatus.isError && (
+        <p className="text-sm text-red-600">{deleteRuleStatus.error.message}</p>
+      )}
+      {deleteRuleStatus.isSuccess && (
+        <p className="text-sm text-green-700">Rule deleted successfully.</p>
+      )}
     </div>
   );
 }

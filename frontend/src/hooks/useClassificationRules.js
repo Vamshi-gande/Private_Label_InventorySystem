@@ -21,9 +21,18 @@ export function useClassificationRules() {
     },
   });
 
+  const deleteRuleMutation = useMutation({
+    mutationFn: classificationService.deleteRule.bind(classificationService),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['classification', 'rules'] });
+    },
+  });
+
   return {
     ...rulesQuery,
     addRule: addRuleMutation.mutate,
     addRuleStatus: addRuleMutation,
+    deleteRule: deleteRuleMutation.mutate,
+    deleteRuleStatus: deleteRuleMutation,
   };
 } 

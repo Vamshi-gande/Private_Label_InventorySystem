@@ -139,3 +139,38 @@ exports.addClassificationRule = async (req, res) => {
         res.status(500).json({ error: 'Internal server error.' });
     }
 };
+
+exports.deleteClassificationRule = async (req, res) => {
+    const { ruleId } = req.params;
+
+    if (!ruleId || isNaN(ruleId)) {
+        return res.status(400).json({ error: 'Invalid rule ID provided.' });
+    }
+
+    try {
+        // First check if the rule exists
+        const existingRule = await pool.query(
+            'SELECT rule_id FROM classification_rules WHERE rule_id = $1',
+            [ruleId]
+        );
+
+        if (existingRule.rows.length === 0) {
+            return res.status(404).json({ error: 'Classification rule not found.' });
+        }
+
+        // Delete the rule
+        await pool.query(
+            'DELETE FROM classification_rules WHERE rule_id = $1',
+            [ruleId]
+        );
+
+        res.json({
+            success: true,
+            message: 'Classification rule deleted successfully.'
+        });
+
+    } catch (error) {
+        console.error('Error deleting classification rule:', error);
+        res.status(500).json({ error: 'Internal server error.' });
+    }
+};

@@ -59,14 +59,38 @@ exports.runConsensus = async (req, res) => {
             return res.status(404).json({ success: false, error: 'No valid behavioral signals extracted.' });
         }
 
-        // Step 4: Initialize clustering
-        await consensusEngine.initializeRegionalClusters(stores, extractedSignals);
+        // Step 4: Initialize clustering with error handling
+        try {
+            await consensusEngine.initializeRegionalClusters(stores, extractedSignals);
+        } catch (clusterError) {
+            console.error('Clustering initialization failed:', clusterError);
+            return res.status(500).json({ 
+                success: false, 
+                error: 'Failed to initialize regional clusters',
+                details: clusterError.message 
+            });
+        }
 
         // Step 5: Validate behavioral consensus
-        const consensusReport = await consensusEngine.validateBehavioralSignals(extractedSignals);
+        let consensusReport;
+        try {
+            consensusReport = await consensusEngine.validateBehavioralSignals(extractedSignals);
+        } catch (validationError) {
+            console.error('Consensus validation failed:', validationError);
+            return res.status(500).json({ 
+                success: false, 
+                error: 'Failed to validate behavioral signals',
+                details: validationError.message 
+            });
+        }
 
         // Optionally cache live signals for Component 5
-        consensusEngine._latestExtractedSignals = extractedSignals;
+        try {
+            consensusEngine._latestExtractedSignals = extractedSignals;
+        } catch (cacheError) {
+            console.warn('Failed to cache signals:', cacheError.message);
+            // Don't fail the entire request for caching issues
+        }
 
         res.json({
             success: true,

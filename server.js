@@ -1,5 +1,6 @@
 require('dotenv').config();
 const express = require('express');
+const cors = require('cors');
 const app = express();
 
 //Cleanup Scheduler
@@ -34,6 +35,14 @@ const contributionRoutes = require('./routes/contribution');
 //Component-7
 const warehouseTransferRoutes = require('./routes/warehouseTransfer');
 
+//CORS
+app.use(cors({
+  origin: 'http://localhost:3000',
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
+
 app.use(express.json());
 
 //Component-1 Routes
@@ -62,6 +71,6 @@ app.use('/api/contribution', contributionRoutes);
 //Component-7 Routes
 app.use('/api/warehouse-transfer', warehouseTransferRoutes);
 
-const PORT = process.env.SERVER_PORT || 3000;
+const PORT = process.env.SERVER_PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 

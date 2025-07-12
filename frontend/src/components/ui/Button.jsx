@@ -16,6 +16,7 @@ export default function Button({
     primary: 'bg-indigo-600 text-white hover:bg-indigo-700 focus-visible:ring-indigo-500',
     secondary:
       'bg-white text-gray-900 border border-gray-300 hover:bg-gray-50 focus-visible:ring-gray-400 dark:bg-gray-800 dark:text-gray-100 dark:border-gray-700 dark:hover:bg-gray-700',
+    danger: 'bg-red-600 text-white hover:bg-red-700 focus-visible:ring-red-500',
   };
 
   const sizes = {

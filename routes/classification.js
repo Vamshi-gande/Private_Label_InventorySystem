@@ -6,5 +6,6 @@ router.post('/products/register', classificationController.registerProduct);
 router.post('/classify/batch', classificationController.batchClassifyProducts);
 router.get('/rules', classificationController.getClassificationRules);
 router.post('/rules', classificationController.addClassificationRule);
+router.delete('/rules/:ruleId', classificationController.deleteClassificationRule);
 
 module.exports = router;

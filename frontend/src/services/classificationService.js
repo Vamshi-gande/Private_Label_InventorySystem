@@ -36,6 +36,21 @@ class ClassificationService {
   }
 
   /**
+   * Delete a classification rule.
+   * @param {number} ruleId The ID of the rule to delete
+   */
+  async deleteRule(ruleId) {
+    try {
+      const res = await apiClient.delete(`/classification/rules/${ruleId}`);
+      return res.data;
+    } catch (error) {
+      console.error('Delete classification rule error:', error);
+      const msg = error?.response?.data?.error;
+      throw new Error(msg || 'Failed to delete classification rule');
+    }
+  }
+
+  /**
    * Transform rules response for UI usage.
    */
   transformRulesForUI(raw) {

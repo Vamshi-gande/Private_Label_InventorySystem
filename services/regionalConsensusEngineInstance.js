@@ -14,6 +14,18 @@ function getLiveSignalForStore(storeId, productId) {
 }
 
 module.exports = {
+    // Engine instances
+    initializeRegionalClusters: engine.initializeRegionalClusters.bind(engine),
+    validateBehavioralSignals: engine.validateBehavioralSignals.bind(engine),
+    getLiveSignalForStore: engine.getLiveSignalForStore.bind(engine),
+    
+
     initializeRegionalConsensus,
-    getLiveSignalForStore
+    
+    get consensusThreshold() { return engine.consensusThreshold; },
+    set consensusThreshold(value) { engine.consensusThreshold = value; },
+    
+
+    get _latestExtractedSignals() { return engine._latestExtractedSignals; },
+    set _latestExtractedSignals(value) { engine._latestExtractedSignals = value; }
 };

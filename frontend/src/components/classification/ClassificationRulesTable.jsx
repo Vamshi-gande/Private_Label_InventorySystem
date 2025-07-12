@@ -1,6 +1,12 @@
-import { Spinner } from '@/components';
+import { Spinner, Button } from '@/components';
 
-export function ClassificationRulesTable({ rows = [], isLoading = false, error = null }) {
+export function ClassificationRulesTable({ 
+  rows = [], 
+  isLoading = false, 
+  error = null, 
+  onDeleteRule = null,
+  deleteRuleStatus = null 
+}) {
   if (isLoading) {
     return (
       <div className="flex items-center space-x-2 py-4">
@@ -28,6 +34,9 @@ export function ClassificationRulesTable({ rows = [], isLoading = false, error =
             <th className="px-4 py-2 text-left font-medium text-gray-700">Pattern</th>
             <th className="px-4 py-2 text-right font-medium text-gray-700">Confidence</th>
             <th className="px-4 py-2 text-left font-medium text-gray-700">Created At</th>
+            {onDeleteRule && (
+              <th className="px-4 py-2 text-center font-medium text-gray-700">Actions</th>
+            )}
           </tr>
         </thead>
         <tbody className="divide-y divide-gray-100">
@@ -42,6 +51,18 @@ export function ClassificationRulesTable({ rows = [], isLoading = false, error =
               <td className="px-4 py-2 whitespace-nowrap">
                 {rule.created_at ? rule.created_at.toLocaleDateString() : '-'}
               </td>
+              {onDeleteRule && (
+                <td className="px-4 py-2 whitespace-nowrap text-center">
+                  <Button
+                    variant="danger"
+                    size="sm"
+                    onClick={() => onDeleteRule(rule.rule_id)}
+                    disabled={deleteRuleStatus?.isLoading}
+                  >
+                    {deleteRuleStatus?.isLoading ? 'Deleting...' : 'Delete'}
+                  </Button>
+                </td>
+              )}
             </tr>
           ))}
         </tbody>
